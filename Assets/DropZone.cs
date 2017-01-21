@@ -9,19 +9,34 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 
 	public void OnDrop(PointerEventData eventData) {
 		Debug.Log (eventData.pointerDrag.name + " dropped onto " + gameObject.name);
-
 		var currentDragged = eventData.pointerDrag.GetComponent<draggable> ();
 		if(currentDragged != null) {
-			if (viablePlacement == currentDragged.viablePlacement) {
 				currentDragged.parentToReturnTo = this.transform;
-			}
 
 		}
+
+
 	}
 	public void OnPointerEnter(PointerEventData eventData) {
-		//Debug.Log ("onPointerEnter");
+		if(eventData.pointerDrag == null) {
+			return;
+		}
+		var currentDragged = eventData.pointerDrag.GetComponent<draggable> ();
+		if(currentDragged != null) {
+			currentDragged.placeholderParent = this.transform;
+		}
 	}
 	public void OnPointerExit(PointerEventData eventData) {
 		//Debug.Log ("onPointerExit");
+		if(eventData.pointerDrag == null) {
+			return;
+		}
+		var currentDragged = eventData.pointerDrag.GetComponent<draggable> ();
+
+		if(currentDragged != null && currentDragged.placeholderParent==this.transform) {
+
+				currentDragged.placeholderParent = currentDragged.parentToReturnTo;
+
+		}
 	}
 }
