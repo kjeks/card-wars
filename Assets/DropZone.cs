@@ -5,38 +5,32 @@ using UnityEngine.EventSystems;
 
 public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler {
 
-	public draggable.Slot viablePlacement = draggable.Slot.MINION_FIELD;
-
-	public void OnDrop(PointerEventData eventData) {
-		Debug.Log (eventData.pointerDrag.name + " dropped onto " + gameObject.name);
-		var currentDragged = eventData.pointerDrag.GetComponent<draggable> ();
-		if(currentDragged != null) {
-				currentDragged.parentToReturnTo = this.transform;
-
-		}
-
-
-	}
 	public void OnPointerEnter(PointerEventData eventData) {
-		if(eventData.pointerDrag == null) {
-			return;
+		if(isItemSelected(eventData)) {
+			putPlaceholderInDropZone (eventData);
 		}
-		var currentDragged = eventData.pointerDrag.GetComponent<draggable> ();
-		if(currentDragged != null) {
-			currentDragged.placeholderParent = this.transform;
-		}
+	}
+	void putPlaceholderInDropZone (PointerEventData eventData) {
+		Card selectedItem = eventData.pointerDrag.GetComponent<Card> ();
+		selectedItem.setPlaceholderDropZone (this.transform);
 	}
 	public void OnPointerExit(PointerEventData eventData) {
-		//Debug.Log ("onPointerExit");
-		if(eventData.pointerDrag == null) {
-			return;
+		if(isItemSelected(eventData)) {
+			putPlaceholderInInitialDropZone (eventData);
 		}
-		var currentDragged = eventData.pointerDrag.GetComponent<draggable> ();
+	}
+	void putPlaceholderInInitialDropZone (PointerEventData eventData) {
+		var selectedItem = eventData.pointerDrag.GetComponent<Card> ();
 
-		if(currentDragged != null && currentDragged.placeholderParent==this.transform) {
-
-				currentDragged.placeholderParent = currentDragged.parentToReturnTo;
-
+		if(selectedItem != null && selectedItem.placeholderDropZone==this.transform) {
+			selectedItem.setPlaceholderDropZone (selectedItem.getCurrentDropZone ());
 		}
+	}
+	public void OnDrop(PointerEventData eventData) {
+		Card selectedItem = eventData.pointerDrag.GetComponent<Card> ();
+		selectedItem.setCurrentDropZone (this.transform);
+	}
+	bool isItemSelected (PointerEventData eventData) {
+		return eventData.pointerDrag != null;
 	}
 }
