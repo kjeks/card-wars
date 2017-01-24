@@ -11,7 +11,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 		}
 	}
 	void putPlaceholderInDropZone (PointerEventData eventData) {
-		Card selectedItem = eventData.pointerDrag.GetComponent<Card> ();
+		Draggable selectedItem = eventData.pointerDrag.GetComponent<Draggable> ();
 		selectedItem.setPlaceholderDropZone (this.transform);
 	}
 	public void OnPointerExit(PointerEventData eventData) {
@@ -20,14 +20,14 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 		}
 	}
 	void putPlaceholderInInitialDropZone (PointerEventData eventData) {
-		var selectedItem = eventData.pointerDrag.GetComponent<Card> ();
+		var selectedItem = eventData.pointerDrag.GetComponent<Draggable> ();
 
 		if(selectedItem != null && selectedItem.placeholderDropZone==this.transform) {
 			selectedItem.setPlaceholderDropZone (selectedItem.getCurrentDropZone ());
 		}
 	}
 	public void OnDrop(PointerEventData eventData) {
-		Card selectedItem = eventData.pointerDrag.GetComponent<Card> ();
+		Draggable selectedItem = eventData.pointerDrag.GetComponent<Draggable> ();
 		selectedItem.setCurrentDropZone (this.transform);
 	}
 	bool isItemSelected (PointerEventData eventData) {
