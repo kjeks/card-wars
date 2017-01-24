@@ -11,8 +11,9 @@ public class Card : MonoBehaviour {
 	public int health;
 
 	public Card setValues (string cardTitle, string cardText, int attack, int health) {
-		Debug.Log (this);
-	
+		Image cardImage = GetComponent<Image> ();
+		cardImage.color = UnityEngine.Color.blue;
+
 		Text [] children = GetComponentsInChildren<Text> ();
 		foreach (Text child in children) {
 			Debug.Log (child.name);
