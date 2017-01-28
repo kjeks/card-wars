@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Hand : DropZone {
 
-	public void generateCard () {
+	public Card generateCard () {
 		GameObject gameObject = (GameObject)Instantiate (Resources.Load ("Card"));
 		Card generatedCard= gameObject.GetComponent<Card> ();
 		string title = "new title";
@@ -15,6 +15,8 @@ public class Hand : DropZone {
 		generatedCard.setValues (title, text, attack, health);
 
 		gameObject.transform.SetParent (this.transform);
+
+		return generatedCard;
 	}
 
 }
