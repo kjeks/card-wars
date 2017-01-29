@@ -7,16 +7,16 @@ public class Card : MonoBehaviour {
 
 	public Text title;
 	private Text text;
-	public int attack;
-	public int health;
+	public Text attack;
+	public Text health;
+	public Text cost;
 
-	public Card setValues (string cardTitle, string cardText, int attack, int health, Color color) {
+	public Card setValues (string cardTitle, string cardText, int cardCost, int cardAttack, int cardHealth, Color color) {
 		Image cardImage = GetComponent<Image> ();
 		cardImage.color = color;
 
 		Text [] children = GetComponentsInChildren<Text> ();
 		foreach (Text child in children) {
-			Debug.Log (child.name);
 			if (child.name == "card title") {
 				title = child.GetComponent <Text> ();
 				title.text = cardTitle;
@@ -24,6 +24,19 @@ public class Card : MonoBehaviour {
 			if (child.name == "card description") {
 				text = child.GetComponent <Text> ();
 				text.text = cardText;
+			}
+			if (child.name == "attack") {
+				Debug.Log ("found attack");
+				attack = child.GetComponent <Text> ();
+				attack.text = cardAttack.ToString();
+			}
+			if (child.name == "health") {
+				health = child.GetComponent <Text> ();
+				health.text = cardHealth.ToString ();
+			}
+			if (child.name == "cost") {
+				cost = child.GetComponent <Text> ();
+				cost.text = cardCost.ToString ();
 			}
 		}
 

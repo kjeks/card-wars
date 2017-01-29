@@ -22,10 +22,11 @@ public class Deck : MonoBehaviour {
 		string title = "new title";
 		string text = "this is the card text";
 		int attack = (int) (Random.value * 10);
-		int health = 2;
+		int health = (int) (Random.value * 10) + 1 ;
+		int cost = (int)(Random.value * 10); 
 		Color color = Random.ColorHSV (0f, 1f, 1f, 1f, 0.3f, 1f);
 
-		generatedCard.setValues (title, text, attack, health, color);
+		generatedCard.setValues (title, text, cost, attack, health, color);
 
 		return generatedCard;
 	}
