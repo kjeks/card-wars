@@ -10,9 +10,9 @@ public class Card : MonoBehaviour {
 	public int attack;
 	public int health;
 
-	public Card setValues (string cardTitle, string cardText, int attack, int health) {
+	public Card setValues (string cardTitle, string cardText, int attack, int health, Color color) {
 		Image cardImage = GetComponent<Image> ();
-		cardImage.color = UnityEngine.Color.blue;
+		cardImage.color = color;
 
 		Text [] children = GetComponentsInChildren<Text> ();
 		foreach (Text child in children) {
