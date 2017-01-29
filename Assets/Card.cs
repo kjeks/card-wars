@@ -16,6 +16,7 @@ public class Card : MonoBehaviour {
 		cardImage.color = color;
 
 		Text [] children = GetComponentsInChildren<Text> ();
+
 		foreach (Text child in children) {
 			if (child.name == "card title") {
 				title = child.GetComponent <Text> ();
@@ -26,7 +27,6 @@ public class Card : MonoBehaviour {
 				text.text = cardText;
 			}
 			if (child.name == "attack") {
-				Debug.Log ("found attack");
 				attack = child.GetComponent <Text> ();
 				attack.text = cardAttack.ToString();
 			}

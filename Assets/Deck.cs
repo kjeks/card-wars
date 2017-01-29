@@ -13,18 +13,14 @@ public class Deck : MonoBehaviour {
 	void Start () {
 		handGO = GameObject.Find ("Hand");
 		hand = (Hand) handGO.GetComponent(typeof(Hand));
-		populateDeckWithCards ();
+
+		//populateDeckWithCards ();
+		addCardFromCollection();
 	
 	}
-	public Card generateCard () {
+	public Card generateCard (string title, string text, int cost, int attack, int health, Color color) {
 		GameObject gameObject = (GameObject)Instantiate (Resources.Load ("Card"));
 		Card generatedCard= gameObject.GetComponent<Card> ();
-		string title = "new title";
-		string text = "this is the card text";
-		int attack = (int) (Random.value * 10);
-		int health = (int) (Random.value * 10) + 1 ;
-		int cost = (int)(Random.value * 10); 
-		Color color = Random.ColorHSV (0f, 1f, 1f, 1f, 0.3f, 1f);
 
 		generatedCard.setValues (title, text, cost, attack, health, color);
 
@@ -36,10 +32,41 @@ public class Deck : MonoBehaviour {
 		hand.addCardToHand (newCard);
 	}
 		
-	private void populateDeckWithCards () {
-		for(int a=0; a<10; a++) {
-			Card newCard = generateCard ();
-			orderedDeck.Add (newCard);
+//	private void populateDeckWithCards () {
+//		for(int a=0; a<10; a++) {
+//			Card newCard = generateCard ();
+//			orderedDeck.Add (newCard);
+//		}
+//	}
+	public void addCardFromCollection () {
+		for (int a = 0; a < 3; a++) {
+			string [] values = CardCollection.getCardValues(a);
+			string title = values[0];
+			string text = values[1];
+			int attack = int.Parse(values[2]);
+			int health = int.Parse(values[3]) ;
+			int cost = int.Parse(values[4]); 
+
+
+			Color color = GetCorrectColor(values[5]);
+			foreach (string value in values) {
+				orderedDeck.Add(generateCard (title, text, cost, attack, health, color));
+			}
+		}
+	}
+	public Color GetCorrectColor (string colorName){
+		switch (colorName) {
+		case "red":
+			return Color.red;
+			break;
+		case "blue":
+			return Color.blue;
+			break;
+		case "green":
+			return Color.green;
+			break;
+		default:
+			return Color.black;
 		}
 	}
 
