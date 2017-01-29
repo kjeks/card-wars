@@ -11,9 +11,11 @@ public class Card : MonoBehaviour {
 	public Text health;
 	public Text cost;
 
-	public Card setValues (string cardTitle, string cardText, int cardCost, int cardAttack, int cardHealth, Color color) {
-		Image cardImage = GetComponent<Image> ();
-		cardImage.color = color;
+	public Card setValues (string cardTitle, string cardText, int cardCost, int cardAttack, int cardHealth, Color color, Texture image) {
+		Image cardColor = GetComponent<Image> ();
+		cardColor.color = color;
+		RawImage cardImage = GetComponentInChildren<RawImage> ();
+		cardImage.texture = image;
 
 		Text [] children = GetComponentsInChildren<Text> ();
 

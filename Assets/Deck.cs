@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 public class Deck : MonoBehaviour {
@@ -17,11 +18,11 @@ public class Deck : MonoBehaviour {
 		populateDeckWithCards ();
 	
 	}
-	public Card generateCard (string title, string text, int cost, int attack, int health, Color color) {
+	public Card generateCard (string title, string text, int cost, int attack, int health, Color color, Texture image) {
 		GameObject gameObject = (GameObject)Instantiate (Resources.Load ("Card"));
 		Card generatedCard= gameObject.GetComponent<Card> ();
 
-		generatedCard.setValues (title, text, cost, attack, health, color);
+		generatedCard.setValues (title, text, cost, attack, health, color, image);
 
 		return generatedCard;
 	}
@@ -40,8 +41,9 @@ public class Deck : MonoBehaviour {
 		int health = int.Parse(values[3]) ;
 		int cost = int.Parse(values[4]); 
 		Color color = GetCorrectColor(values[5]);
+		Texture image = getCardImage (values [6]);
 
-		orderedDeck.Add(generateCard (title, text, cost, attack, health, color));
+		orderedDeck.Add(generateCard (title, text, cost, attack, health, color, image));
 	}
 
 	public Color GetCorrectColor (string colorName){
@@ -55,6 +57,10 @@ public class Deck : MonoBehaviour {
 		default:
 			return Color.black;
 		}
+	}
+	public Texture getCardImage (string imageName) {
+		Texture image = (Texture) Resources.Load ("Materials/" + imageName);
+		return image;
 	}
 	public void populateDeckWithCards () {
 		while (orderedDeck.Count < 30) {

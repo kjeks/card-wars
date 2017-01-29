@@ -7,15 +7,15 @@ public class CardCollection : MonoBehaviour {
 
 	void Start () {
 		collection = new List<KeyValuePair <int, string []>> ();
-		collection.Add(new KeyValuePair<int, string []>(1, new string[6]{"scout", "this is a scout", "2", "2", "2", "red"}));
-		collection.Add(new KeyValuePair<int, string []>(2, new string[6]{"warrior", "this is a warrior", "2", "3", "3", "blue"}));
-		collection.Add(new KeyValuePair<int, string []>(3, new string[6]{"big scout", "this is a big scout", "6", "4", "9", "green"}));
-		collection.Add(new KeyValuePair<int, string []>(4, new string[6]{"big warrior", "this is a big warrior", "6", "7", "9", "black"}));
-		collection.Add(new KeyValuePair<int, string []>(4, new string[6]{"fire imp", "", "1", "2", "1", "red"}));
-		collection.Add(new KeyValuePair<int, string []>(4, new string[6]{"frog", "", "2", "2", "3", "blue"}));
-		collection.Add(new KeyValuePair<int, string []>(4, new string[6]{"vulcano giant", "", "9", "9", "9", "red"}));
-		collection.Add(new KeyValuePair<int, string []>(4, new string[6]{"elf warrior", "", "2", "2", "3", "green"}));
-		collection.Add(new KeyValuePair<int, string []>(4, new string[6]{"elven healer", "", "3", "3", "5", "green"}));
+		collection.Add(new KeyValuePair<int, string []>(1, new string[7]{"scout", "this is a scout", "2", "2", "2", "red", "kjeks"}));
+		collection.Add(new KeyValuePair<int, string []>(2, new string[7]{"warrior", "this is a warrior", "2", "3", "3", "blue", "kjeks"}));
+		collection.Add(new KeyValuePair<int, string []>(3, new string[7]{"big scout", "this is a big scout", "6", "4", "9", "green", "kjeks"}));
+		collection.Add(new KeyValuePair<int, string []>(4, new string[7]{"big warrior", "this is a big warrior", "6", "7", "9", "black", "kjeks"}));
+		collection.Add(new KeyValuePair<int, string []>(4, new string[7]{"fire imp", "", "1", "2", "1", "red","flower"}));
+		collection.Add(new KeyValuePair<int, string []>(4, new string[7]{"frog", "", "2", "2", "3", "blue", "flower"}));
+		collection.Add(new KeyValuePair<int, string []>(4, new string[7]{"vulcano giant", "", "9", "9", "9", "red", "flower"}));
+		collection.Add(new KeyValuePair<int, string []>(4, new string[7]{"elf warrior", "", "2", "2", "3", "green", "flower"}));
+		collection.Add(new KeyValuePair<int, string []>(4, new string[7]{"elven healer", "", "3", "3", "5", "green", "flower"}));
 
 	}
 	public static string [] getCardValues (int cardId) {
