@@ -5,7 +5,7 @@ using UnityEngine;
 public class CardCollection : MonoBehaviour {
 	public static List<KeyValuePair <int , string []>> collection;
 
-	void Start () {
+	void Awake () {
 		collection = new List<KeyValuePair <int, string []>> ();
 		collection.Add(new KeyValuePair<int, string []>(1, new string[7]{"scout", "this is a scout", "2", "2", "2", "red", "kjeks"}));
 		collection.Add(new KeyValuePair<int, string []>(2, new string[7]{"warrior", "this is a warrior", "2", "3", "3", "blue", "kjeks"}));
