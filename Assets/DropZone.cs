@@ -5,6 +5,8 @@ using UnityEngine.EventSystems;
 
 public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler {
 
+	int cardsInField;
+
 
 	public void OnPointerEnter(PointerEventData eventData) {
 		if(isItemSelected(eventData)) {
@@ -13,7 +15,10 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 	}
 	void putPlaceholderInDropZone (PointerEventData eventData) {
 		Draggable selectedItem = eventData.pointerDrag.GetComponent<Draggable> ();
-		selectedItem.setPlaceholderDropZone (this.transform);
+		if (selectedItem.isLegalDropzone ()) {
+			selectedItem.setPlaceholderDropZone (this.transform);
+		}
+
 	}
 	public void OnPointerExit(PointerEventData eventData) {
 		if(isItemSelected(eventData)) {

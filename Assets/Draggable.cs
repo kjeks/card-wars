@@ -22,13 +22,13 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 		placeholderDropZone = this.transform.parent;
 	
 		replaceSelectedCardWithPlaceholder ();
-		setCardSize ();
 	}
 
 	public void replaceSelectedCardWithPlaceholder () {
 		Transform canvas = this.transform.parent.parent;
 		this.transform.SetParent (canvas);
 		placeholder = createPlaceholder ();
+		setPlaceholderToCardSize ();
 	}
 
 	GameObject createPlaceholder () {
@@ -40,12 +40,17 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 	}
 	public void OnDrag(PointerEventData eventData) {
 		this.transform.position = eventData.position;
-		if (placeholder.transform.parent != placeholderDropZone) {
-			placeholder.transform.SetParent (placeholderDropZone);
-		}
+		putPlaceholderInCorrectDropzone ();
 		putPlaceholderInCorrectPosition ();
 
 	}
+	public void putPlaceholderInCorrectDropzone () {
+		//TODO check if legal before changing placeholder pos
+		if (placeholder.transform.parent != placeholderDropZone) {
+			placeholder.transform.SetParent (placeholderDropZone);
+		}
+	}
+
 	void putPlaceholderInCorrectPosition () {
 		int correctPlaceholderPosition = findCorrectPlaceholderPosition (); 
 
@@ -78,9 +83,13 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 		this.transform.SetParent (currentDropZone);
 		GetComponent<CanvasGroup> ().blocksRaycasts = true;
 		this.transform.SetSiblingIndex (placeholder.transform.GetSiblingIndex ());
+		if (isLegalDropzone ()) {
+			
+		}
 		Destroy (placeholder);
+
 	}
-	public void setCardSize () {
+	public void setPlaceholderToCardSize () {
 		LayoutElement layout = placeholder.AddComponent<LayoutElement> ();
 		layout.preferredWidth = this.GetComponent<LayoutElement> ().preferredWidth;
 		layout.preferredHeight = this.GetComponent<LayoutElement> ().preferredHeight;
@@ -98,5 +107,16 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 	}
 	public Transform getPlaceholderDropZone () {
 		return placeholderDropZone;
+	}
+	public bool isLegalDropzone () {
+		int maxCardsInZone = 0;
+		Debug.Log (currentDropZone);
+		if(currentDropZone.GetType() == typeof(DropZone)) {
+			maxCardsInZone = 3;
+		}
+		if(currentDropZone.GetType() == typeof(Hand)) {
+			maxCardsInZone = 7;
+		}
+		return currentDropZone.transform.childCount < maxCardsInZone;
 	}
 }
