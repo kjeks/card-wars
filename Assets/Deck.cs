@@ -23,6 +23,7 @@ public class Deck : MonoBehaviour {
 		Card generatedCard= gameObject.GetComponent<Card> ();
 
 		generatedCard.setValues (title, text, cost, attack, health, color, image);
+		generatedCard.tag = "Card";
 
 		return generatedCard;
 	}

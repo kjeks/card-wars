@@ -83,9 +83,6 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 		this.transform.SetParent (currentDropZone);
 		GetComponent<CanvasGroup> ().blocksRaycasts = true;
 		this.transform.SetSiblingIndex (placeholder.transform.GetSiblingIndex ());
-		if (isLegalDropzone ()) {
-			
-		}
 		Destroy (placeholder);
 
 	}
@@ -108,15 +105,5 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 	public Transform getPlaceholderDropZone () {
 		return placeholderDropZone;
 	}
-	public bool isLegalDropzone () {
-		int maxCardsInZone = 0;
-		Debug.Log (currentDropZone);
-		if(currentDropZone.GetType() == typeof(DropZone)) {
-			maxCardsInZone = 3;
-		}
-		if(currentDropZone.GetType() == typeof(Hand)) {
-			maxCardsInZone = 7;
-		}
-		return currentDropZone.transform.childCount < maxCardsInZone;
-	}
+
 }

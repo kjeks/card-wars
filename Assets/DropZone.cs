@@ -5,21 +5,15 @@ using UnityEngine.EventSystems;
 
 public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler {
 
-	int cardsInField;
-
-
 	public void OnPointerEnter(PointerEventData eventData) {
 		if(isItemSelected(eventData)) {
-			putPlaceholderInDropZone (eventData);
+			Draggable selectedItem = eventData.pointerDrag.GetComponent<Draggable> ();
+			if (isLegalDropzone (this)) {
+				selectedItem.setPlaceholderDropZone (this.transform);
+			}
 		}
 	}
-	void putPlaceholderInDropZone (PointerEventData eventData) {
-		Draggable selectedItem = eventData.pointerDrag.GetComponent<Draggable> ();
-		if (selectedItem.isLegalDropzone ()) {
-			selectedItem.setPlaceholderDropZone (this.transform);
-		}
 
-	}
 	public void OnPointerExit(PointerEventData eventData) {
 		if(isItemSelected(eventData)) {
 			putPlaceholderInInitialDropZone (eventData);
@@ -28,15 +22,33 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 	void putPlaceholderInInitialDropZone (PointerEventData eventData) {
 		var selectedItem = eventData.pointerDrag.GetComponent<Draggable> ();
 
-		if(selectedItem != null && selectedItem.placeholderDropZone==this.transform) {
+		if(selectedItem.placeholderDropZone==this.transform) {
 			selectedItem.setPlaceholderDropZone (selectedItem.getCurrentDropZone ());
 		}
 	}
 	public void OnDrop(PointerEventData eventData) {
 		Draggable selectedItem = eventData.pointerDrag.GetComponent<Draggable> ();
-		selectedItem.setCurrentDropZone (this.transform);
+		if(isLegalDropzone(this)) {
+			selectedItem.setCurrentDropZone (this.transform);
+		}
 	}
 	bool isItemSelected (PointerEventData eventData) {
 		return eventData.pointerDrag != null;
+	}
+	public bool isLegalDropzone (DropZone dropZone) {
+		int maxCardsInZone = 0;
+		int cardsInZone = 0;
+		foreach (Transform child in dropZone.transform) {
+			if (child.tag == "Card") {
+				cardsInZone = cardsInZone + 1;
+			}
+		}
+		if (dropZone.tag == "Field") {
+			maxCardsInZone = 3;
+		}
+		if(dropZone.tag == "Hand") {
+			maxCardsInZone = 7;
+		}
+		return cardsInZone < maxCardsInZone;
 	}
 }
