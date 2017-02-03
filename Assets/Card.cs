@@ -41,8 +41,17 @@ public class Card : MonoBehaviour {
 				cost.text = cardCost.ToString ();
 			}
 		}
-
 		return this.GetComponent<Card>();
+	}
+
+	void OnEnable () {
+		TurnController.onClicked += handleNextPhase;
+	}
+	void OnDisable () {
+		TurnController.onClicked -= handleNextPhase;
+	}
+	void handleNextPhase () {
+		Debug.Log ("going into next phase");
 	}
 
 }
