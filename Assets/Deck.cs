@@ -73,6 +73,7 @@ public class Deck : MonoBehaviour {
 	public Card drawCardFromDeck () {
 		Card drawnCard = orderedDeck [0];
 		orderedDeck.RemoveAt(0);
+		TurnController.onClicked += drawnCard.handleNextPhase;
 		return drawnCard;
 	}
 }
