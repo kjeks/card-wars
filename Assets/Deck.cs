@@ -16,6 +16,8 @@ public class Deck : MonoBehaviour {
 		hand = (Hand) handGO.GetComponent(typeof(Hand));
 
 		populateDeckWithCards ();
+		TurnController.initialDraw += initialDraw;
+		TurnController.draw += drawCard; 
 	
 	}
 	public Card generateCard (string title, string text, int cost, int attack, int health, Color color, Texture image) {
@@ -68,12 +70,22 @@ public class Deck : MonoBehaviour {
 			addRandomCardFromCollection ();
 		}
 	}
-
-
+		
 	public Card drawCardFromDeck () {
 		Card drawnCard = orderedDeck [0];
 		orderedDeck.RemoveAt(0);
-		TurnController.onClicked += drawnCard.handleNextPhase;
+		TurnController.setup += drawnCard.handleSetupPhase;
+		TurnController.reaction += drawnCard.handleReactionPhase;
+		TurnController.battle += drawnCard.handleBattlePhase;
+
 		return drawnCard;
+	}
+	void initialDraw () {
+		for (int i = 0; i <= 4; i++) {
+			hand.addCardToHand(drawCardFromDeck ());
+		}
+	}
+	void drawCard () {
+		hand.addCardToHand(drawCardFromDeck());
 	}
 }

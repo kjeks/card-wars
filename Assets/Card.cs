@@ -43,12 +43,19 @@ public class Card : MonoBehaviour {
 		}
 		return this.GetComponent<Card>();
 	}
-	
 	void OnDisable () {
-		TurnController.onClicked -= handleNextPhase;
+		TurnController.setup -= handleSetupPhase;
+		TurnController.battle -= handleBattlePhase;
+		TurnController.reaction -= handleReactionPhase;
 	}
-	public void handleNextPhase () {
-		Debug.Log ("going into next phase");
+	public void handleSetupPhase () {
+		
+	}
+	public void handleReactionPhase () {
+	
+	}
+	public void handleBattlePhase () {
+		
 	}
 
 }
