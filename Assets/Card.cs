@@ -10,12 +10,14 @@ public class Card : MonoBehaviour {
 	public Text attack;
 	public Text health;
 	public Text cost;
+	public bool scouting;
 
-	public Card setValues (string cardTitle, string cardText, int cardCost, int cardAttack, int cardHealth, Color color, Texture image) {
+	public Card setValues (string cardTitle, string cardText, int cardCost, int cardAttack, int cardHealth, Color color, Texture image, bool isScout) {
 		Image cardColor = GetComponent<Image> ();
 		cardColor.color = color;
 		RawImage cardImage = GetComponentInChildren<RawImage> ();
 		cardImage.texture = image;
+		scouting = isScout;
 
 		Text [] children = GetComponentsInChildren<Text> ();
 
@@ -52,7 +54,7 @@ public class Card : MonoBehaviour {
 		GetComponent <Draggable>().enabled = true;
 	}
 	public void handleReactionPhase () {
-		GetComponent <Draggable>().enabled = false;
+		GetComponent <Draggable>().enabled = scouting ? true : false;
 	}
 	public void handleBattlePhase () {
 		

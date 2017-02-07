@@ -20,11 +20,10 @@ public class Deck : MonoBehaviour {
 		TurnController.draw += drawCard; 
 	
 	}
-	public Card generateCard (string title, string text, int cost, int attack, int health, Color color, Texture image) {
+	public Card generateCard (string title, string text, int cost, int attack, int health, Color color, Texture image, bool isScout) {
 		GameObject gameObject = (GameObject)Instantiate (Resources.Load ("Card"));
 		Card generatedCard= gameObject.GetComponent<Card> ();
-
-		generatedCard.setValues (title, text, cost, attack, health, color, image);
+		generatedCard.setValues (title, text, cost, attack, health, color, image, isScout);
 		generatedCard.tag = "Card";
 
 		return generatedCard;
@@ -45,8 +44,9 @@ public class Deck : MonoBehaviour {
 		int cost = int.Parse(values[4]); 
 		Color color = GetCorrectColor(values[5]);
 		Texture image = getCardImage (values [6]);
+		bool isScout= bool.Parse(values[7]);
 
-		orderedDeck.Add(generateCard (title, text, cost, attack, health, color, image));
+		orderedDeck.Add(generateCard (title, text, cost, attack, health, color, image, isScout));
 	}
 
 	public Color GetCorrectColor (string colorName){
