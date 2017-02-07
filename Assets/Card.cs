@@ -49,10 +49,10 @@ public class Card : MonoBehaviour {
 		TurnController.reaction -= handleReactionPhase;
 	}
 	public void handleSetupPhase () {
-		
+		GetComponent <Draggable>().enabled = true;
 	}
 	public void handleReactionPhase () {
-	
+		GetComponent <Draggable>().enabled = false;
 	}
 	public void handleBattlePhase () {
 		
