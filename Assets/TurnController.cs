@@ -10,6 +10,7 @@ public class TurnController : MonoBehaviour {
 	public static event phaseAction reaction;
 	public static event phaseAction draw;
 	public static event phaseAction battle;
+	public static event phaseAction summary;
 
 	void Start () {
 		StartCoroutine (phaseController ());
@@ -23,7 +24,8 @@ public class TurnController : MonoBehaviour {
 			reactionPhase ();
 			yield return new WaitForSeconds (10.0f);
 			battlePhase ();
-
+			yield return new WaitForSeconds (5.0f);
+			summaryPhase ();
 		}
 
 	}
@@ -41,11 +43,15 @@ public class TurnController : MonoBehaviour {
 		reaction ();
 	}
 	void drawPhase () {
-		Debug.Log ("draw");
+		Debug.Log ("drawPhase");
 		draw ();
 	}
 	void battlePhase () {
-		Debug.Log ("battle");
+		Debug.Log ("battlePhase");
 		battle ();
+	}
+	void summaryPhase () {
+		Debug.Log ("summaryPhase");
+		summary ();
 	}
 }

@@ -5,6 +5,10 @@ using UnityEngine.EventSystems;
 
 public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler {
 
+	public void Start () {
+		TurnController.battle += handleBattlePhase;
+		TurnController.summary += handleSummaryPhase;
+	}
 	public void OnPointerEnter(PointerEventData eventData) {
 		if(isItemSelected(eventData)) {
 			Draggable selectedItem = eventData.pointerDrag.GetComponent<Draggable> ();
@@ -37,12 +41,8 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 	}
 	public bool isLegalDropzone (DropZone dropZone) {
 		int maxCardsInZone = 0;
-		int cardsInZone = 0;
-		foreach (Transform child in dropZone.transform) {
-			if (child.tag == "Card") {
-				cardsInZone = cardsInZone + 1;
-			}
-		}
+		int cardsInZone = dropZone.getCardsInZone().Count;
+
 		if (dropZone.tag == "Field") {
 			maxCardsInZone = 3;
 		}
@@ -50,5 +50,44 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 			maxCardsInZone = 7;
 		}
 		return cardsInZone < maxCardsInZone;
+	}
+	public List <Card> getCardsInZone () {
+		List<Card> cardList = new List<Card>();
+
+		foreach (Transform child in this.transform) {
+			if (child.tag == "Card") {
+				cardList.Add (child.GetComponent<Card>());
+			}
+		}
+		return cardList;
+	}
+	public void handleBattlePhase () {
+		int damageDealth = 0;
+		List <Card> cardsInZone = getCardsInZone ();
+		if (this.tag == "Field") {
+			foreach(Card card in cardsInZone) {
+				damageDealth = damageDealth + int.Parse (card.attack.text);
+			}
+			Debug.Log (damageDealth);
+		}
+	}
+	public void handleSummaryPhase () {
+		int damageReceived = 6;
+		List <Card> cardsInZone = getCardsInZone ();
+		if (this.tag == "Field") {
+			while (damageReceived > 0 && cardsInZone.Count > 0) {
+				Card cardReceivingDamage = cardsInZone [0];
+				int health = int.Parse (cardReceivingDamage.health.text);
+
+				if (damageReceived >= health) {
+					damageReceived = damageReceived - health;
+					cardsInZone.Remove (cardReceivingDamage);
+					Destroy (cardReceivingDamage.gameObject);
+				} else {
+					cardReceivingDamage.health.text = (health - damageReceived).ToString ();
+					break;
+				}
+			}
+		}
 	}
 }
