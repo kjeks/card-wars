@@ -12,6 +12,9 @@ public class TurnController : MonoBehaviour {
 	public static event phaseAction battle;
 	public static event phaseAction summary;
 
+	public enum Phase {INITIAL_DRAW, DRAW, SETUP, REACTION, BATTLE, SUMMARY};
+	private static Phase currentPhase = Phase.INITIAL_DRAW;
+
 	void Start () {
 		StartCoroutine (phaseController ());
 	}
@@ -31,27 +34,36 @@ public class TurnController : MonoBehaviour {
 	}
 	void initialDrawPhase () {
 		Debug.Log ("initialPhase");
+		currentPhase = Phase.INITIAL_DRAW;
 		initialDraw ();
 
 	}
 	void setupPhase () {
 		Debug.Log ("setupPhase");
+		currentPhase = Phase.SETUP;
 		setup ();
 	}
 	void reactionPhase () {
 		Debug.Log ("reactionPhase");
+		currentPhase = Phase.REACTION;
 		reaction ();
 	}
 	void drawPhase () {
 		Debug.Log ("drawPhase");
+		currentPhase = Phase.DRAW;
 		draw ();
 	}
 	void battlePhase () {
 		Debug.Log ("battlePhase");
+		currentPhase = Phase.BATTLE;
 		battle ();
 	}
 	void summaryPhase () {
 		Debug.Log ("summaryPhase");
+		currentPhase = Phase.SUMMARY;
 		summary ();
+	}
+	public static Phase getCurrentPhase () {
+		return currentPhase;
 	}
 }

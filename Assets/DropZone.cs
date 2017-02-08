@@ -12,7 +12,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 	public void OnPointerEnter(PointerEventData eventData) {
 		if(isItemSelected(eventData)) {
 			Draggable selectedItem = eventData.pointerDrag.GetComponent<Draggable> ();
-			if (isLegalDropzone (this)) {
+			if (isSpaceInDropzone (this)) {
 				selectedItem.setPlaceholderDropZone (this.transform);
 			}
 		}
@@ -32,14 +32,17 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 	}
 	public void OnDrop(PointerEventData eventData) {
 		Draggable selectedItem = eventData.pointerDrag.GetComponent<Draggable> ();
-		if(isLegalDropzone(this)) {
+		Card card = eventData.pointerDrag.GetComponent<Card> ();
+		if(isSpaceInDropzone(this) && cardCanBeDropped(card)) {
 			selectedItem.setCurrentDropZone (this.transform);
 		}
 	}
+
 	bool isItemSelected (PointerEventData eventData) {
 		return eventData.pointerDrag != null;
 	}
-	public bool isLegalDropzone (DropZone dropZone) {
+	public bool isSpaceInDropzone (DropZone dropZone) {
+		TurnController.getCurrentPhase ();
 		int maxCardsInZone = 0;
 		int cardsInZone = dropZone.getCardsInZone().Count;
 
@@ -50,6 +53,13 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 			maxCardsInZone = 7;
 		}
 		return cardsInZone < maxCardsInZone;
+	}
+
+	public bool cardCanBeDropped (Card card) {
+		if (TurnController.getCurrentPhase () == TurnController.Phase.SETUP) {
+			return true;
+		}
+		return card.scouting && (TurnController.getCurrentPhase () == TurnController.Phase.REACTION); 
 	}
 	public List <Card> getCardsInZone () {
 		List<Card> cardList = new List<Card>();
@@ -68,7 +78,6 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 			foreach(Card card in cardsInZone) {
 				damageDealth = damageDealth + int.Parse (card.attack.text);
 			}
-			Debug.Log (damageDealth);
 		}
 	}
 	public void handleSummaryPhase () {

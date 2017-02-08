@@ -45,7 +45,6 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
 	}
 	public void putPlaceholderInCorrectDropzone () {
-		//TODO check if legal before changing placeholder pos
 		if (placeholder.transform.parent != placeholderDropZone) {
 			placeholder.transform.SetParent (placeholderDropZone);
 		}
