@@ -12,7 +12,8 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 	public void OnPointerEnter(PointerEventData eventData) {
 		if(isItemSelected(eventData)) {
 			Draggable selectedItem = eventData.pointerDrag.GetComponent<Draggable> ();
-			if (isSpaceInDropzone (this)) {
+			Card card = eventData.pointerDrag.GetComponent<Card> ();
+			if (isSpaceInDropzone (this) && cardCanBeDropped(card)) {
 				selectedItem.setPlaceholderDropZone (this.transform);
 			}
 		}
