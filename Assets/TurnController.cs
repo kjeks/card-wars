@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TurnController : MonoBehaviour {
 
@@ -11,12 +12,19 @@ public class TurnController : MonoBehaviour {
 	public static event phaseAction draw;
 	public static event phaseAction battle;
 	public static event phaseAction summary;
-
 	public enum Phase {INITIAL_DRAW, DRAW, SETUP, REACTION, BATTLE, SUMMARY};
+
 	private static Phase currentPhase = Phase.INITIAL_DRAW;
 
+	private Text currentPhaseText;
+
+
+
 	void Start () {
+		GameObject GOtext = GameObject.FindGameObjectWithTag("Info");
+		currentPhaseText = GOtext.GetComponent<Text> ();
 		StartCoroutine (phaseController ());
+
 	}
 	IEnumerator phaseController () {
 		initialDrawPhase ();
@@ -33,34 +41,34 @@ public class TurnController : MonoBehaviour {
 
 	}
 	void initialDrawPhase () {
-		Debug.Log ("initialPhase");
 		currentPhase = Phase.INITIAL_DRAW;
+		currentPhaseText.text = "initial draw";
 		initialDraw ();
 
 	}
 	void setupPhase () {
-		Debug.Log ("setupPhase");
 		currentPhase = Phase.SETUP;
+		currentPhaseText.text = "Setup";
 		setup ();
 	}
 	void reactionPhase () {
-		Debug.Log ("reactionPhase");
 		currentPhase = Phase.REACTION;
+		currentPhaseText.text = "reaction";
 		reaction ();
 	}
 	void drawPhase () {
-		Debug.Log ("drawPhase");
 		currentPhase = Phase.DRAW;
+		currentPhaseText.text = "draw";
 		draw ();
 	}
 	void battlePhase () {
-		Debug.Log ("battlePhase");
 		currentPhase = Phase.BATTLE;
+		currentPhaseText.text = "battle";
 		battle ();
 	}
 	void summaryPhase () {
-		Debug.Log ("summaryPhase");
 		currentPhase = Phase.SUMMARY;
+		currentPhaseText.text = "summary";
 		summary ();
 	}
 	public static Phase getCurrentPhase () {
