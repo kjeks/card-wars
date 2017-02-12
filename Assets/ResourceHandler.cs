@@ -20,21 +20,21 @@ public class ResourceHandler : MonoBehaviour {
 			}
 		}
 
-		TurnController.setup += handleSetupPhase;
 		TurnController.initialDraw += handleInitialPhase;
 		TurnController.summary += handleSummaryPhase;
+		TurnController.draw += handleDrawPhase;
 
 	}
-	void handleSetupPhase () {
-		Debug.Log ("ResourceHandler");
+	void handleDrawPhase () {
+		addMana (1);
+		addGold (3);
 	}
 	void handleInitialPhase () {
-		setMana (10);
+		setMana (5);
 		setGold (10);
 	}
 	void handleSummaryPhase () {
-		addMana (2);
-		removeGold (2);
+		
 	}
 
 
