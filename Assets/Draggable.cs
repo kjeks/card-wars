@@ -8,6 +8,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
 	public Transform currentDropZone = null;
 	public Transform placeholderDropZone = null;
+	public Transform initialDropZone = null;
 	public GameObject placeholder = null;
 
 	public Draggable () {

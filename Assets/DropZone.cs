@@ -37,13 +37,18 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 	public void OnDrop(PointerEventData eventData) {
 		Draggable selectedItem = eventData.pointerDrag.GetComponent<Draggable> ();
 		Card card = eventData.pointerDrag.GetComponent<Card> ();
-		if(isSpaceInDropzone(this) && cardCanBeDropped(card) && resourceHandler.canAffordCard(card)) {
-			putCardIntoPlay (card, selectedItem);
+		if(isSpaceInDropzone(this) && cardCanBeDropped(card)) {
+			if (resourceHandler.canAffordCard (card) && selectedItem.currentDropZone.tag == "Hand") {
+				putCardIntoPlay (card, selectedItem);
+			} else if(selectedItem.currentDropZone.tag == "Field"){
+				selectedItem.setCurrentDropZone (this.transform);
+			}
 		}
 	}
 	public void putCardIntoPlay (Card card, Draggable selectedItem) {
-		selectedItem.setCurrentDropZone (this.transform);
 		resourceHandler.handleMinionPlayed (card.getGoldCost(), 0);
+
+		selectedItem.setCurrentDropZone (this.transform);
 	}
 
 	bool isItemSelected (PointerEventData eventData) {
