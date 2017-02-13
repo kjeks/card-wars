@@ -60,5 +60,8 @@ public class Card : MonoBehaviour {
 	public void handleBattlePhase () {
 		
 	}
+	public int getGoldCost () {
+		return int.Parse (cost.text);
+	}
 
 }

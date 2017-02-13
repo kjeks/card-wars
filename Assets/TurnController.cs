@@ -13,6 +13,7 @@ public class TurnController : MonoBehaviour {
 	public static event phaseAction draw;
 	public static event phaseAction battle;
 	public static event phaseAction summary;
+
 	public enum Phase {INITIAL_DRAW, DRAW, SETUP, REACTION, BATTLE, SUMMARY};
 
 	private static Phase currentPhase = Phase.INITIAL_DRAW;

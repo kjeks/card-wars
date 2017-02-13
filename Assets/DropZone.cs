@@ -4,10 +4,13 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler {
+	ResourceHandler resourceHandler;
 
 	public void Start () {
 		TurnController.battle += handleBattlePhase;
 		TurnController.summary += handleSummaryPhase;
+		GameObject resourceHandlerGO = GameObject.FindWithTag ("ResourceHandler");
+		resourceHandler = resourceHandlerGO.GetComponent<ResourceHandler> ();
 	}
 	public void OnPointerEnter(PointerEventData eventData) {
 		if(isItemSelected(eventData)) {
@@ -34,9 +37,13 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 	public void OnDrop(PointerEventData eventData) {
 		Draggable selectedItem = eventData.pointerDrag.GetComponent<Draggable> ();
 		Card card = eventData.pointerDrag.GetComponent<Card> ();
-		if(isSpaceInDropzone(this) && cardCanBeDropped(card)) {
-			selectedItem.setCurrentDropZone (this.transform);
+		if(isSpaceInDropzone(this) && cardCanBeDropped(card) && resourceHandler.canAffordCard(card)) {
+			putCardIntoPlay (card, selectedItem);
 		}
+	}
+	public void putCardIntoPlay (Card card, Draggable selectedItem) {
+		selectedItem.setCurrentDropZone (this.transform);
+		resourceHandler.handleMinionPlayed (card.getGoldCost(), 0);
 	}
 
 	bool isItemSelected (PointerEventData eventData) {
