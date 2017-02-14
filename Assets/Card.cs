@@ -12,6 +12,7 @@ public class Card : MonoBehaviour {
 	public Text cost;
 	public bool scouting;
 
+
 	public Card setValues (string cardTitle, string cardText, int cardCost, int cardAttack, int cardHealth, Color color, Texture image, bool isScout) {
 		Image cardColor = GetComponent<Image> ();
 		cardColor.color = color;

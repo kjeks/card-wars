@@ -21,6 +21,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 		GetComponent<CanvasGroup> ().blocksRaycasts = false;
 		currentDropZone = this.transform.parent;
 		placeholderDropZone = this.transform.parent;
+		initialDropZone = this.transform.parent;
 	
 		replaceSelectedCardWithPlaceholder ();
 	}
@@ -81,6 +82,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 	}
 	public void OnEndDrag(PointerEventData eventData) {
 		this.transform.SetParent (currentDropZone);
+		initialDropZone = currentDropZone; 
 		GetComponent<CanvasGroup> ().blocksRaycasts = true;
 		this.transform.SetSiblingIndex (placeholder.transform.GetSiblingIndex ());
 		Destroy (placeholder);

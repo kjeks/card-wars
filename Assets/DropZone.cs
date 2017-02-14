@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler {
 	ResourceHandler resourceHandler;
 
+
 	public void Start () {
 		TurnController.battle += handleBattlePhase;
 		TurnController.summary += handleSummaryPhase;
@@ -14,13 +15,14 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 	}
 	public void OnPointerEnter(PointerEventData eventData) {
 		if(isItemSelected(eventData)) {
-			Draggable selectedItem = eventData.pointerDrag.GetComponent<Draggable> ();
+			Draggable selectedItem= eventData.pointerDrag.GetComponent<Draggable> ();
 			Card card = eventData.pointerDrag.GetComponent<Card> ();
-			if (isSpaceInDropzone (this) && cardCanBeDropped(card)) {
+			if (isSpaceInDropzone () && cardCanBeDropped(card)) {
 				selectedItem.setPlaceholderDropZone (this.transform);
 			}
 		}
 	}
+
 
 	public void OnPointerExit(PointerEventData eventData) {
 		if(isItemSelected(eventData)) {
@@ -37,43 +39,66 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 	public void OnDrop(PointerEventData eventData) {
 		Draggable selectedItem = eventData.pointerDrag.GetComponent<Draggable> ();
 		Card card = eventData.pointerDrag.GetComponent<Card> ();
-		if(isSpaceInDropzone(this) && cardCanBeDropped(card)) {
-			if (resourceHandler.canAffordCard (card) && selectedItem.currentDropZone.tag == "Hand") {
+
+		if (selectedItem.initialDropZone.tag == "Hand" && this.tag == "Field") {
+			playMinionFromHand (card, selectedItem);
+		}else if(selectedItem.initialDropZone.tag == "Field" && this.tag == "Field") {
+			cardSwitchDropzone (card, selectedItem);
+		}
+	}
+	private void playMinionFromHand (Card card, Draggable selectedItem) {
+		if(TurnController.getCurrentPhase () == TurnController.Phase.SETUP &&
+			resourceHandler.canAffordCard(card) &&
+			isSpaceInDropzone()){
 				putCardIntoPlay (card, selectedItem);
-			} else if(selectedItem.currentDropZone.tag == "Field"){
-				selectedItem.setCurrentDropZone (this.transform);
 			}
+	}
+	private void cardSwitchDropzone (Card card, Draggable selectedItem) {
+		if (isLegalPhase(card) && isSpaceInDropzone ()) {
+			selectedItem.setCurrentDropZone (this.transform);
+		}
+	}
+
+	private bool isLegalPhase (Card card) {
+		if (card.scouting) {
+			return TurnController.getCurrentPhase () == TurnController.Phase.SETUP || TurnController.getCurrentPhase () == TurnController.Phase.REACTION;
+		} else {
+			return TurnController.getCurrentPhase () == TurnController.Phase.SETUP;
 		}
 	}
 	public void putCardIntoPlay (Card card, Draggable selectedItem) {
 		resourceHandler.handleMinionPlayed (card.getGoldCost(), 0);
-
 		selectedItem.setCurrentDropZone (this.transform);
 	}
+
 
 	bool isItemSelected (PointerEventData eventData) {
 		return eventData.pointerDrag != null;
 	}
-	public bool isSpaceInDropzone (DropZone dropZone) {
-		TurnController.getCurrentPhase ();
-		int maxCardsInZone = 0;
-		int cardsInZone = dropZone.getCardsInZone().Count;
 
-		if (dropZone.tag == "Field") {
+	public bool cardCanBeDropped (Card card) {
+		if (isSpaceInDropzone ()) {
+			if (TurnController.getCurrentPhase () == TurnController.Phase.SETUP) {
+				return true;
+			}
+			return card.scouting && (TurnController.getCurrentPhase () == TurnController.Phase.REACTION); 
+		}
+		return false;
+	}
+
+	public bool isSpaceInDropzone () {
+		int maxCardsInZone = 0;
+		int cardsInZone = this.getCardsInZone().Count;
+
+		if (this.tag == "Field") {
 			maxCardsInZone = 3;
 		}
-		if(dropZone.tag == "Hand") {
+		if(this.tag == "Hand") {
 			maxCardsInZone = 7;
 		}
 		return cardsInZone < maxCardsInZone;
 	}
 
-	public bool cardCanBeDropped (Card card) {
-		if (TurnController.getCurrentPhase () == TurnController.Phase.SETUP) {
-			return true;
-		}
-		return card.scouting && (TurnController.getCurrentPhase () == TurnController.Phase.REACTION); 
-	}
 	public List <Card> getCardsInZone () {
 		List<Card> cardList = new List<Card>();
 
@@ -84,6 +109,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 		}
 		return cardList;
 	}
+
 	public void handleBattlePhase () {
 		int damageDealth = 0;
 		List <Card> cardsInZone = getCardsInZone ();
@@ -93,6 +119,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 			}
 		}
 	}
+
 	public void handleSummaryPhase () {
 		int damageReceived = 6;
 		List <Card> cardsInZone = getCardsInZone ();
